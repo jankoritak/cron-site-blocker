@@ -8,15 +8,24 @@ const HOST_LOCAL_HOST = "127.0.0.1";
 
 const BLOCKED_HOSTS_LIST = ["youtube.com", "reddit.com"];
 
+const buildHostsLine = (host, includeWWW = false) =>
+  includeWWW
+    ? HOST_LOCAL_HOST + " " + HOST_WWW_PREFIX + host
+    : HOST_LOCAL_HOST + " " + host;
+
 const addHostsEntry = () => {
   try {
     let hostsFile = fs.readFileSync(HOSTS_FILE_PATH, "utf8");
 
+    if (BLOCKED_HOSTS_LIST.length > 0) {
+      hostsFile += os.EOL;
+    }
+
     BLOCKED_HOSTS_LIST.forEach((blockedHost) => {
       if (!hostsFile.includes(blockedHost)) {
-        hostsFile += HOST_LOCAL_HOST + " " + blockedHost + os.EOL;
-        hostsFile +=
-          HOST_LOCAL_HOST + " " + HOST_WWW_PREFIX + blockedHost + os.EOL;
+        hostsFile += buildHostsLine(blockedHost) + os.EOL;
+        hostsFile += buildHostsLine(blockedHost, true) + os.EOL;
+
         fs.writeFileSync(HOSTS_FILE_PATH, hostsFile.trim(), "utf8");
 
         console.log("Added", blockedHost, "to", HOSTS_FILE_PATH);
@@ -35,11 +44,9 @@ const removeHostsEntry = () => {
 
     BLOCKED_HOSTS_LIST.forEach((blockedHost) => {
       if (hostsFile.includes(blockedHost)) {
-        hostsFile = hostsFile.replace(HOST_LOCAL_HOST + " " + blockedHost, "");
-        hostsFile = hostsFile.replace(
-          HOST_LOCAL_HOST + " " + HOST_WWW_PREFIX + blockedHost,
-          ""
-        );
+        hostsFile = hostsFile.replace(buildHostsLine(blockedHost), "");
+        hostsFile = hostsFile.replace(buildHostsLine(blockedHost, true), "");
+
         fs.writeFileSync(HOSTS_FILE_PATH, hostsFile.trim(), "utf8");
 
         console.log("Removed", blockedHost, "from", HOSTS_FILE_PATH);
