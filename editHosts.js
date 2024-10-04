@@ -26,7 +26,7 @@ const addHostsEntry = () => {
         hostsFile += buildHostsLine(blockedHost) + os.EOL;
         hostsFile += buildHostsLine(blockedHost, true) + os.EOL;
 
-        fs.writeFileSync(HOSTS_FILE_PATH, hostsFile.trim(), "utf8");
+        fs.writeFileSync(HOSTS_FILE_PATH, hostsFile, "utf8");
 
         console.log("Added", blockedHost, "to", HOSTS_FILE_PATH);
       } else {
