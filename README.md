@@ -32,15 +32,15 @@ node editHosts.js remove
 
 To block/unblock the configured websites (hosts) automatically, you need to create a CRON job.
 
-Here's a config that blocks youtube.com every day at 9:00 AM until 4:00 PM.
+Here's a config that blocks youtube.com every week day at 9:00 AM until 4:00 PM.
 
 Open `crontab` with `sudo crontab -e`
 
 Add the following lines to the file:
 
 ```
-0 9 * * * /usr/bin/node /path/to/editHosts.js add
-0 4 * * * /usr/bin/node /path/to/editHosts.js remove
+0 9 * * 1-5 /usr/bin/node /path/to/editHosts.js add
+0 16 * * 1-5 /usr/bin/node /path/to/editHosts.js remove
 ```
 
 Replace `/path/to/cron-site-blocker` with the path to the `cron-site-blocker` directory.
