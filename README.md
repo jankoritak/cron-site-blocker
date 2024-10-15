@@ -47,4 +47,8 @@ Replace `/path/to/cron-site-blocker` with the path to the `cron-site-blocker` di
 
 Check if the job is working by running `crontab -l` and checking if the jobs are listed.
 
+## Permissions
+
+If you're on MacOS, you may need to add the script to access the file system via `Security & Permissions -> Full Disc Access`.
+
 🤓 Enjoy a productive workday!
