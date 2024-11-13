@@ -64,11 +64,11 @@ and make sure `/etc/hosts` has been edited with your `BLOCKED_HOSTS_LIST`.
 
 Check if the job is working by running `crontab -l` and checking if the jobs are listed.
 
+🤓 Enjoy a productive workday!
+
 ## Permissions
 
 If you're on MacOS, you may need to add the script to access the file system via `Security & Permissions -> Full Disc Access`.
-
-🤓 Enjoy a productive workday!
 
 ## Debugging
 
