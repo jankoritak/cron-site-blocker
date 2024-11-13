@@ -1,5 +1,9 @@
 const fs = require("fs");
+const path = require("path");
 const os = require("os");
+
+// Define the log file path
+const logFilePath = path.join(__dirname, "cron.log");
 
 const HOSTS_FILE_PATH = "/etc/hosts";
 
@@ -7,6 +11,20 @@ const HOST_WWW_PREFIX = "www.";
 const HOST_LOCAL_HOST = "127.0.0.1";
 
 const BLOCKED_HOSTS_LIST = ["youtube.com", "reddit.com"];
+
+// Logging function
+const logMessage = (message) => {
+  const timestamp = new Date().toISOString();
+  const logEntry = `[${timestamp}] ${message}\n`;
+
+  console.log(logEntry);
+
+  fs.appendFile(logFilePath, logEntry, (err) => {
+    if (err) {
+      console.error("Error writing to log file:", err);
+    }
+  });
+};
 
 const buildHostsLine = (host, includeWWW = false) =>
   includeWWW
@@ -28,9 +46,9 @@ const addHostsEntry = () => {
 
         fs.writeFileSync(HOSTS_FILE_PATH, hostsFile, "utf8");
 
-        console.log("Added", blockedHost, "to", HOSTS_FILE_PATH);
+        logMessage(`Added ${blockedHost} to ${HOSTS_FILE_PATH}`);
       } else {
-        console.log("Host", blockedHost, "already in", HOSTS_FILE_PATH);
+        logMessage(`Host ${blockedHost} already in ${HOSTS_FILE_PATH}`);
       }
     });
   } catch (err) {
@@ -49,13 +67,13 @@ const removeHostsEntry = () => {
 
         fs.writeFileSync(HOSTS_FILE_PATH, hostsFile.trim(), "utf8");
 
-        console.log("Removed", blockedHost, "from", HOSTS_FILE_PATH);
+        logMessage(`Removed ${blockedHost} from ${HOSTS_FILE_PATH}`);
       } else {
-        console.log("Host", blockedHost, "not in", HOSTS_FILE_PATH);
+        logMessage(`Host ${blockedHost} not in ${HOSTS_FILE_PATH}`);
       }
     });
   } catch (err) {
-    console.error("Error editing hosts file:", err);
+    logMessage("Error editing hosts file:", err);
   }
 };
 
@@ -69,15 +87,15 @@ const editHosts = () => {
 
   switch (action) {
     case "add":
-      console.log("Add hosts entry");
+      logMessage("Add hosts entry");
       addHostsEntry();
       break;
     case "remove":
-      console.log("Remove hosts entry");
+      logMessage("Remove hosts entry");
       removeHostsEntry();
       break;
     default:
-      console.log("Invalid choice. Please try again.");
+      logMessage("Invalid choice. Please try again.");
       break;
   }
 };
